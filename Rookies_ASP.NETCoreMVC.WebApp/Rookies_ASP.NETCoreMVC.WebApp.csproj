@@ -8,11 +8,17 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.102.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Rookies_ASP.NETCoreMVC.BusinessLogic\Rookies_ASP.NETCoreMVC.BusinessLogic.csproj" />
     <ProjectReference Include="..\Rookies_ASP.NETCoreMVC.Shared\Rookies_ASP.NETCoreMVC.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\NashTech\Data\" />
+    <Folder Include="Areas\NashTech\Models\" />
   </ItemGroup>
 
 </Project>
