@@ -1,0 +1,122 @@
+﻿@using Rookies_ASP.NETCoreMVC.Models.Models;
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+@{
+    var people = ViewData["people"] as IEnumerable<Person>;
+    var oldestPerson = ViewData["oldestPerson"] as Person;
+    var fullNames = ViewData["fullNames"] as List<string>;
+}
+<form asp-controller="Rookies" asp-action="Index" method="get">
+    <input type="text" name="birthYear" />
+    <button type="submit" class="btn btn-primary">Search By Age</button>
+</form>
+<div style="display: flex">
+    <form asp-controller="Rookies" asp-action="Index">
+        <button type="submit" class="btn btn-primary">Get All Students</button>
+    </form>
+    <form asp-controller="Rookies" asp-action="GetMaleStudents" method="get">
+        <button type="submit" class="btn btn-primary">Get Male Students</button>
+    </form>
+    <form asp-controller="Rookies" asp-action="GetFullName" method="get">
+        <button type="submit" class="btn btn-primary">Get Full Name</button>
+    </form>
+    <form asp-controller="Rookies" asp-action="GetTheOldest" method="get">
+        <button type="submit" class="btn btn-primary">Get The Oldest Person</button>
+    </form>
+    <form asp-controller="Rookies" asp-action="ExportExcel" method="post">
+        <button type="submit" class="btn btn-primary">Export Excel</button>
+    </form>
+</div>
+@if (people != null)
+{
+    <table border="1" class="table">
+        <thead>
+            <tr>
+                <td scope="col">STT</td>
+                <td scope="col">First Name</td>
+                <td scope="col">Last Name</td>
+                <td scope="col">Gender</td>
+                <td scope="col">Age</td>
+                <td scope="col">Date of Birth</td>
+                <td scope="col">Phone Number</td>
+                <td scope="col">Birthplace</td>
+                <td scope="col">Is Graduated</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int count = 1;
+            }
+            @foreach (var person in people)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td>@person.FirstName</td>
+                    <td>@person.LastName</td>
+                    <td>@person.Gender</td>
+                    <td>@person.Age</td>
+                    <td>@person.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                    <td>@person.PhoneNumber</td>
+                    <td>@person.Birthplace</td>
+                    <td>@person.IsGraduated</td>
+                </tr>
+                count++;
+            }
+        </tbody>
+    </table>
+}
+else if (fullNames != null)
+{
+    <table border="1" class="table">
+        <thead>
+            <tr>
+                <td scope="col">STT</td>
+                <td scope="col">Full Name</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int count = 1;
+            }
+            @foreach (var fullName in fullNames)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td>@fullName</td>
+                </tr>
+                count++;
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p2>THE OLDEST PERSON: </p2>
+    <table border="1" class="table">
+        <thead>
+            <tr>
+                <td scope="col">First Name</td>
+                <td scope="col">Last Name</td>
+                <td scope="col">Gender</td>
+                <td scope="col">Age</td>
+                <td scope="col">Date of Birth</td>
+                <td scope="col">Phone Number</td>
+                <td scope="col">Birthplace</td>
+                <td scope="col">Is Graduated</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@oldestPerson.FirstName</td>
+                <td>@oldestPerson.LastName</td>
+                <td>@oldestPerson.Gender</td>
+                <td>@oldestPerson.Age</td>
+                <td>@oldestPerson.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                <td>@oldestPerson.PhoneNumber</td>
+                <td>@oldestPerson.Birthplace</td>
+                <td>@oldestPerson.IsGraduated</td>
+            </tr>
+        </tbody>
+    </table>
+}
+
