@@ -1,5 +1,8 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, LazZiya.TagHelpers
 @using Rookies_ASP.NETCoreMVC.Models.Models;
+@using Rookies_ASP.NETCoreMVC.Shared.DTOs;
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 @{
@@ -10,11 +13,29 @@
     var oldestPerson = ViewData["oldestPerson"] as Person;
     var fullNames = ViewData["fullNames"] as List<string>;
     var errorMessage = ViewData["errorMessage"] as string;
+    var message = ViewData["message"] as string;
 }
+@model PagingModel
+
 <form asp-controller="Rookies" asp-action="Index" method="get">
     <input type="text" name="birthYear" value="@Context.Request.Query["birthYear"]" />
     <button type="submit" class="btn btn-primary">Search By Age</button>
-</form> <br />
+</form>
+<br />
+<form asp-controller="Rookies" asp-action="GetPeopleBasedOnAge" method="get">
+    <h2>Select Age</h2>
+    <select name="selectCondition" id="selectCondition" onchange="this.form.submit()">
+        <option value="-2">Default</option>
+        <option value="-1">Less than 2000</option>
+        <option value="0">Equal to 2000</option>
+        <option value="1">Greater than 2000</option>
+    </select>
+</form>
+<br />
+<form asp-controller="Rookies" asp-action="Add" method="get">
+    <button type="submit" class="btn btn-primary">Add a new person</button>
+</form>
+<br />
 <div style="display: flex; gap: 10px;">
     <form asp-controller="Rookies" asp-action="Index">
         <button type="submit" class="btn btn-primary">Get All Students</button>
@@ -32,7 +53,12 @@
         <button type="submit" class="btn btn-primary">Export Excel</button>
     </form>
 </div>
-
+<br />
+@* display message *@
+@if (!string.IsNullOrEmpty(message))
+{
+    <p1 style="color: green">@message</p1>
+}
 @* display error message *@
 @if (!string.IsNullOrEmpty(errorMessage))
 {
@@ -41,41 +67,54 @@
 @* check if list people is null *@
 @if (people != null)
 {
-    <table border="1" class="table">
-        <thead>
-            <tr>
-                <td scope="col">STT</td>
-                <td scope="col">First Name</td>
-                <td scope="col">Last Name</td>
-                <td scope="col">Gender</td>
-                <td scope="col">Age</td>
-                <td scope="col">Date of Birth</td>
-                <td scope="col">Phone Number</td>
-                <td scope="col">Birthplace</td>
-                <td scope="col">Is Graduated</td>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int count = 1;
-            }
-            @foreach (var person in people)
-            {
+    <div>
+        <table border="1" class="table">
+            <thead>
                 <tr>
-                    <td>@count</td>
-                    <td>@person.FirstName</td>
-                    <td>@person.LastName</td>
-                    <td>@person.Gender</td>
-                    <td>@person.Age</td>
-                    <td>@person.DateOfBirth.ToString("yyyy-MM-dd")</td>
-                    <td>@person.PhoneNumber</td>
-                    <td>@person.Birthplace</td>
-                    <td>@person.IsGraduated</td>
+                    <td scope="col">First Name</td>
+                    <td scope="col">Last Name</td>
+                    <td scope="col">Gender</td>
+                    <td scope="col">Age</td>
+                    <td scope="col">Date of Birth</td>
+                    <td scope="col">Phone Number</td>
+                    <td scope="col">Birthplace</td>
+                    <td scope="col">Is Graduated</td>
+                    <td scope="col"></td>
+                    <td scope="col"></td>
+                    <td scope="col"></td>
                 </tr>
-                count++;
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var person in people)
+                {
+                    <tr>
+                        <td>@person.FirstName</td>
+                        <td>@person.LastName</td>
+                        <td>@person.Gender</td>
+                        <td>@person.Age</td>
+                        <td>@person.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                        <td>@person.PhoneNumber</td>
+                        <td>@person.Birthplace</td>
+                        <td>@(person.IsGraduated ? "Yes" : "No")</td>
+                        <td>
+                            <a class="btn btn-warning" href="/NashTech/Rookies/Detail?id=@person.Id" role="button">View Detail</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="/NashTech/Rookies/Update?id=@person.Id" role="button">Update</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" href="#" role="button" onclick="confirmDelete('@person.Id', '@person.FirstName @person.LastName')">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (Model != null)
+        {
+            <paging class="pagination" total-records="@Model.TotalCount" show-total-pages="false" show-total-records="false" page-size="@Model.Size" page-no="@Model.PageIndex" show-page-size-nav="false">
+            </paging>
+        }
+    </div>
 }
 @* check if full name list is null *@
 else if (fullNames != null)
@@ -128,9 +167,53 @@ else
                 <td>@oldestPerson.DateOfBirth.ToString("yyyy-MM-dd")</td>
                 <td>@oldestPerson.PhoneNumber</td>
                 <td>@oldestPerson.Birthplace</td>
-                <td>@oldestPerson.IsGraduated</td>
+                <td>@(oldestPerson.IsGraduated ? "Yes" : "No")</td>
             </tr>
         </tbody>
     </table>
 }
+@* event for delete *@
+<script>
+    function confirmDelete(personId, personName) {
+        if (confirm('Are you sure you want to delete ' + personName + '?')) {
+            deletePerson(personId, personName);
+        }
+    }
+    function deletePerson(personId, personName) {
+        // create hidden form
+        var form = document.createElement('form');
+        form.method = 'post';
+        form.action = '/NashTech/Rookies/Delete';
+
+        // create an input tag to pass parameter
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'id';
+        input.value = personId;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+
+        // Submit the form
+        form.submit();
+
+        // Show success message
+        alert('Person ' + personName + ' was removed from the list successfully.');
+    }
+</script>
+
+@* handle display for combobox *@
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedCondition = urlParams.get('selectCondition');
+
+    const selectElement = document.getElementById('selectCondition');
+    const options = selectElement.options;
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].value === selectedCondition) {
+            options[i].setAttribute('selected', 'selected');
+            break;
+        }
+    }
+</script>
 

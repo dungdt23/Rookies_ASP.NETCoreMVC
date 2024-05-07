@@ -11,8 +11,8 @@ namespace Rookies_ASP.NETCoreMVC.WebApp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddTransient<IPersonRepository, PersonRepository>();
-            builder.Services.AddTransient<IPersonBusinessLogic, PersonBusinessLogic>();
+            builder.Services.AddSingleton<IPersonRepository, PersonRepository>();
+            builder.Services.AddSingleton<IPersonBusinessLogic, PersonBusinessLogic>();
 
 
             var app = builder.Build();

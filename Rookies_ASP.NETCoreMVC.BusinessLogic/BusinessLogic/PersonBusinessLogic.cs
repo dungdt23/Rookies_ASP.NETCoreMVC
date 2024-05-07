@@ -2,12 +2,14 @@
 using Rookies_ASP.NETCoreMVC.BusinessLogic.Repositories;
 using Rookies_ASP.NETCoreMVC.Models.DTOs;
 using Rookies_ASP.NETCoreMVC.Models.Models;
+using Rookies_ASP.NETCoreMVC.Shared.Constants;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Rookies_ASP.NETCoreMVC.BusinessLogic.BusinessLogic
@@ -59,7 +61,7 @@ namespace Rookies_ASP.NETCoreMVC.BusinessLogic.BusinessLogic
         }
         private DataTable ConvertListToDataTable()
         {
-            var people = _personRepository.GetPeopleData();
+            var people = _personRepository.GetAllPeople();
             DataTable dataTable = new DataTable();
             dataTable.TableName = "List People";
             dataTable.Columns.Add("First Name", typeof(string));
@@ -93,14 +95,63 @@ namespace Rookies_ASP.NETCoreMVC.BusinessLogic.BusinessLogic
             return _personRepository.GetFullNames();
         }
 
-        public IEnumerable<Person> GetPeople(FilterPersonDto? filterPersonDto)
+        public IEnumerable<Person> GetPeople(FilterPersonDto? filterPersonDto, int? startIndex, int? size)
         {
-            return _personRepository.GetPeople(filterPersonDto);
+            return _personRepository.GetPeople(filterPersonDto, startIndex, size);
         }
 
         public Person? GetTheOldest()
         {
             return _personRepository.GetTheOldest();
         }
+
+        public int Add(Person person)
+        {
+            if (IsValidPhoneNumber(person.PhoneNumber))
+            {
+                person.Age = DateTime.Now.Year - person.DateOfBirth.Year;
+                _personRepository.Add(person);
+                return ConstantsStatus.Success;
+            }
+            else return ConstantsStatus.Failed;
+        }
+
+        public int Delete(Guid id)
+        {
+            return _personRepository.Delete(id);
+        }
+
+        public int Update(Guid id, Person person)
+        {
+            if (IsValidPhoneNumber(person.PhoneNumber))
+            {
+                person.Age = DateTime.Now.Year - person.DateOfBirth.Year;
+                return _personRepository.Update(id, person);
+            }
+            else return ConstantsStatus.Failed;
+        }
+        public Person? GetPersonById(Guid id)
+        {
+            return _personRepository.GetPersonById(id);
+        }
+        private bool IsValidPhoneNumber(string phoneNumber)
+        {
+
+            string phoneNumberRegexPattern = @"^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])[0-9]{7,8}$";
+
+            Regex regex = new Regex(phoneNumberRegexPattern);
+
+            return regex.IsMatch(phoneNumber);
+        }
+
+        public IEnumerable<Person> GetAllPeople()
+        {
+            return _personRepository.GetAllPeople();
+        }
+        public IEnumerable<Person> GetPeopleBaseOnAge(Func<Person, bool> condition, int? startIndex, int? size)
+        {
+            return _personRepository.GetPeopleBaseOnAge(condition, startIndex, size);
+        }
+
     }
 }
