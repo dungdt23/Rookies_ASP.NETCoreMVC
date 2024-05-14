@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rookies_ASP.NETCoreMVC.Mode
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rookies_ASP.NETCoreMVC.BusinessLogic", "Rookies_ASP.NETCoreMVC.BusinessLogic\Rookies_ASP.NETCoreMVC.BusinessLogic.csproj", "{1C808E1F-2007-4C65-A8BD-948F570E8FDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rookies_ASP.NETCoreMVC.Shared", "Rookies_ASP.NETCoreMVC.Shared\Rookies_ASP.NETCoreMVC.Shared.csproj", "{E4E861DF-BC0F-4814-B3D0-9DE511EE828C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rookies_ASP.NETCoreMVC.Shared", "Rookies_ASP.NETCoreMVC.Shared\Rookies_ASP.NETCoreMVC.Shared.csproj", "{E4E861DF-BC0F-4814-B3D0-9DE511EE828C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rookies_ASP.NETCoreMVC.TestController", "Rookies_ASP.NETCoreMVC.TestController\Rookies_ASP.NETCoreMVC.TestController.csproj", "{C95C5F3B-EC5E-48B2-A25A-F4CC4CA9EBE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rookies_ASP.NETCoreMVC.TestBusiness", "Rookies_ASP.NETCoreMVC.TestBusiness\Rookies_ASP.NETCoreMVC.TestBusiness.csproj", "{F7C0D9A6-C10F-450A-ABF6-C087A4C8E902}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{E4E861DF-BC0F-4814-B3D0-9DE511EE828C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4E861DF-BC0F-4814-B3D0-9DE511EE828C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4E861DF-BC0F-4814-B3D0-9DE511EE828C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C95C5F3B-EC5E-48B2-A25A-F4CC4CA9EBE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C95C5F3B-EC5E-48B2-A25A-F4CC4CA9EBE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C95C5F3B-EC5E-48B2-A25A-F4CC4CA9EBE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C95C5F3B-EC5E-48B2-A25A-F4CC4CA9EBE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7C0D9A6-C10F-450A-ABF6-C087A4C8E902}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7C0D9A6-C10F-450A-ABF6-C087A4C8E902}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7C0D9A6-C10F-450A-ABF6-C087A4C8E902}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7C0D9A6-C10F-450A-ABF6-C087A4C8E902}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
